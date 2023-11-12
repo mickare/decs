@@ -1,0 +1,49 @@
+syntax = "proto3";
+package decs.protocol;
+import "google/protobuf/timestamp.proto";
+
+message Entity {
+  bytes entity_id = 1;
+  google.protobuf.Timestamp created = 2;
+  reserved 3 to 9;
+  repeated Component components = 10;
+}
+
+message Component {
+  string component_id = 1;
+  // google.protobuf.Timestamp created = 2;
+  // google.protobuf.Timestamp modified = 3;
+  reserved 2 to 9;
+  map<string, any> data = 10;
+}
+
+enum ComponentAction {
+  ACTION_UNSPECIFIED = 0;
+  ACTION_ADD = 1;
+  ACTION_UPDATE = 2;
+  ACTION_DELETE = 3;
+}
+
+message ComponentEvent {
+  bytes entity_id = 1;
+  Component component = 2;
+  ComponentAction action = 3;
+  string correlation_id = 4;
+}
+
+message SubscriptionFilter {
+  string component_id = 1;
+  bool any_action = 2;
+  repeated ComponentAction required_actions = 3;
+  repeated string required_additional_components = 4;
+}
+
+message Subscription { 
+  repeated SubscriptionFilter filter = 1;
+}
+
+message SubscriptionEvent {
+  bytes entity_id = 1;
+  repeated Component components = 2;
+  ComponentEvent trigger_event = 3;
+}

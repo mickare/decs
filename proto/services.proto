@@ -1,0 +1,15 @@
+syntax = "proto3";
+package decs.protocol;
+import public "events.proto";
+
+message AddComponentRequest {
+    bytes entity_id = 1;
+    events.Component component = 2;
+}
+
+message AddComponentResponse {}
+
+service EntityService {
+    rpc AddComponent(AddComponentRequest) returns (AddComponentResponse);
+    rpc RemoveComponent(AddComponentRequest) returns (AddComponentResponse);
+}
